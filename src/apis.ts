@@ -31,4 +31,10 @@ export const getBrandDetails = unstable_cache(getBrandDetailsRaw, undefined, {
   revalidate: Infinity,
 });
 
-export const getSuggestedBrands = getSuggestedBrandsRaw;
+export const getSuggestedBrands = unstable_cache(
+  getSuggestedBrandsRaw,
+  undefined,
+  {
+    revalidate: Infinity,
+  },
+);
