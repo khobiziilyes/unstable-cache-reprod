@@ -1,10 +1,12 @@
-export async function getBrands() {
+import { unstable_cache } from "next/cache";
+
+async function getBrandsRaw() {
   console.log("Fetching brands ...");
 
   return [{ id: 1 }, { id: 2 }, { id: 3 }];
 }
 
-export async function getBrandDetails(brandId: number) {
+async function getBrandDetailsRaw(brandId: number) {
   console.log(`Fetching details for brand ${brandId} ...`);
 
   return {
@@ -14,9 +16,19 @@ export async function getBrandDetails(brandId: number) {
   };
 }
 
-export async function getSuggestedBrands(currentBrandId: number) {
+async function getSuggestedBrandsRaw(currentBrandId: number) {
   console.log(`Fetching suggested brands for brand ${currentBrandId} ...`);
 
   const allBrands = await getBrands();
   return allBrands.filter((brand) => brand.id !== currentBrandId);
 }
+
+export const getBrands = unstable_cache(getBrandsRaw, undefined, {
+  revalidate: Infinity,
+});
+
+export const getBrandDetails = unstable_cache(getBrandDetailsRaw, undefined, {
+  revalidate: Infinity,
+});
+
+export const getSuggestedBrands = getSuggestedBrandsRaw;
